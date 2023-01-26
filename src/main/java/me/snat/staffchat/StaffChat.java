@@ -20,26 +20,19 @@ public class StaffChat implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        Player player = (Player) sender;
-
-        if (!(sender instanceof Player)) return false;
-
-        if (args.length < 1) player.sendMessage("Incorrect Usage!");
-
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0 ; i < args.length ; i++) {
-            builder.append(args[i]);
-        }
-        String message = builder.toString();
-
-        for (Player staff : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission("staffchat.use")) {
-                staff.sendMessage(color(main.getConfig().getString("message-layout")
-                        .replace("{PLAYER}", player.getDisplayName())
-                        .replace("{MESSAGE}", message)));
-            }
+        String name = sender instanceof Player ? ((Player)sender).getDisplayName() : "Server";
+        if (args.length < 1) {
+            sender.sendMessage("Please provide a message.");
+            return true;
         }
 
-        return false;
+        String message = String.join(" ", args);
+        message = color(main.getConfig().getString("message-layout")
+                .replace("{PLAYER}", name)
+                .replace("{MESSAGE}", message));
+
+        Bukkit.broadcast(message, "staffchat.use");
+
+        return true;
     }
 }
