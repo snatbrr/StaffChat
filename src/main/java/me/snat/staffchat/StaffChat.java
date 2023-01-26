@@ -27,7 +27,7 @@ public class StaffChat implements CommandExecutor {
         }
 
         String message = String.join(" ", args);
-        message = color(main.getConfig().getString("message-layout")
+        message = color(main.getMessageLayout()
                 .replace("{PLAYER}", name)
                 .replace("{MESSAGE}", message));
 
